@@ -36,7 +36,7 @@ class ScoreAdminController extends Controller
         // Valideer input
         $data = $request->validate([
             'player_name' => 'required|string|max:255',
-            'score' => 'required|integer',
+            'score' => 'required|integer|min:0',
         ]);
 
         // Update het model met de gevalideerde data

@@ -36,7 +36,7 @@ return [
     ],
 
     'leaderboard' => [
-    'api_token' => env('LEADERBOARD_API_TOKEN'),
+        'api_token' => env('LEADERBOARD_API_TOKEN'),
     ],
 
 
