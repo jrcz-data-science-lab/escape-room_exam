@@ -81,7 +81,6 @@ Dit beperkt tot 30 requests per minuut per IP. Laravel geeft dan een 429-error.
 **Waarom oké voor nu:**
 
 -   `.env` zit in `.gitignore` (niet in repo)
--   Dit is een demo-project
 -   Voor production zou je hashing gebruiken (User model + bcrypt)
 
 ---

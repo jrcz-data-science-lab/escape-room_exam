@@ -21,4 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Endpoint om nieuwe scores te plaatsen. Deze route valt onder de API groep
 // en is beveiligd met de 'leaderboard.token' middleware (controleert X-Token header)
-Route::post('/scores', [ScoreController::class, 'store'])->middleware('leaderboard.token');
+// Beperk het aantal verzoeken per minuut om misbruik (spam/DoS) te voorkomen:
+// maximaal 30 verzoeken per minuut per IP-adres. Overschrijding levert HTTP 429 op.
+Route::post('/scores', [ScoreController::class, 'store'])
+    ->middleware(['leaderboard.token', 'throttle:30,1']);
