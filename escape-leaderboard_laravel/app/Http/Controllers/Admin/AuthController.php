@@ -44,9 +44,11 @@ class AuthController extends Controller
     // Logout action voor admin
     public function logout(Request $request)
     {
-        // Verwijder de admin-flag uit de sessie
-        $request->session()->forget('is_admin');
-        // Redirect terug naar de publieke leaderboard
+        // Invalideer de volledige sessie en genereer een nieuw CSRF-token
+        // Dit voorkomt session-fixation en zorgt dat oude sessie-cookies ongeldig worden
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect()->route('leaderboard.index');
     }
 }
