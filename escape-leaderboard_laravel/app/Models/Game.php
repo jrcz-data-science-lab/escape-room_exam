@@ -12,6 +12,7 @@ class Game extends Model
     protected $fillable = [
         'name',
         'slug',
-        'description'
+        'description',
+        'api_token'
     ];
 }

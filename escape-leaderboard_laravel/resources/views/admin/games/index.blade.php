@@ -36,6 +36,7 @@
                     <tr>
                         <th class="px-4 py-2">Naam</th>
                         <th class="px-4 py-2">Slug</th>
+                        <th class="px-4 py-2">API Token</th>
                         <th class="px-4 py-2">Aangemaakt</th>
                     </tr>
                 </thead>
@@ -44,6 +45,7 @@
                     <tr class="border-t">
                         <td class="px-4 py-2">{{ $game->name }}</td>
                         <td class="px-4 py-2">{{ $game->slug }}</td>
+                        <td class="px-4 py-2 font-mono text-sm break-all">{{ $game->api_token }}</td>
                         <td class="px-4 py-2">{{ $game->created_at->format('Y-m-d') }}</td>
                     </tr>
                     @endforeach

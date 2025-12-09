@@ -37,8 +37,13 @@ class GameAdminController extends Controller
             $i++;
         }
 
+        // Generate an API token for this game if not provided
+        if (empty($data['api_token'])) {
+            $data['api_token'] = Str::random(40);
+        }
+
         Game::create($data);
 
-        return redirect()->route('admin.games.index')->with('success', 'Spel toegevoegd.');
+        return redirect()->route('admin.games.index')->with('success', 'Spel toegevoegd. API-token automatisch gegenereerd.');
     }
 }
