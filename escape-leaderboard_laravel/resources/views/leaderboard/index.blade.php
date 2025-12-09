@@ -29,27 +29,40 @@
         {{-- Titel van de pagina --}}
         <h1 class="text-4xl font-bold text-center mb-8">Leaderboard</h1>
 
-        {{-- Tabel met scores (hier worden de scores weergegeven) --}}
+        {{-- Zoekveld en tabel met geaggregeerde scores per speler --}}
+        <div class="mb-6 max-w-md mx-auto">
+            <form method="GET" action="{{ route('leaderboard.index') }}" class="flex gap-2">
+                <input type="text" name="q" value="{{ isset($q) ? $q : '' }}" placeholder="Zoek op spelernaam" class="flex-1 border px-3 py-2 rounded">
+                <button type="submit" class="bg-gray-800 text-white px-4 py-2 rounded">Zoek</button>
+                <a href="{{ route('leaderboard.index') }}" class="ml-2 px-3 py-2 border rounded text-gray-700">Reset</a>
+            </form>
+            @if(isset($searchedRank) && $searchedRank)
+            <div class="mt-2 text-sm text-gray-700">Jouw positie: <strong>#{{ $searchedRank }}</strong></div>
+            @elseif(isset($q) && $q)
+            <div class="mt-2 text-sm text-gray-600">Geen exacte positie gevonden voor "{{ $q }}" (toon matches hieronder)</div>
+            @endif
+        </div>
+
         <div class="bg-white rounded-lg shadow-lg overflow-hidden">
             <table class="min-w-full">
                 <thead class="bg-gray-800 text-white">
                     <tr>
                         <th class="px-6 py-3 text-left text-sm font-semibold">#</th>
                         <th class="px-6 py-3 text-left text-sm font-semibold">Speler</th>
-                        <th class="px-6 py-3 text-right text-sm font-semibold">Score</th>
+                        <th class="px-6 py-3 text-right text-sm font-semibold">Beste score</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                    @foreach($scores as $index => $score)
+                    @foreach($scores as $index => $row)
                     <tr class="hover:bg-gray-50">
                         <td class="px-6 py-4 text-sm font-medium text-gray-900">
-                            {{ $index + 1 }}
+                            {{ ($scores->currentPage() - 1) * $scores->perPage() + $index + 1 }}
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-900">
-                            {{ $score->player_name }}
+                            {{ $row->player_name }}
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-900 text-right font-mono">
-                            {{ number_format($score->score) }}
+                            {{ number_format($row->best_score) }}
                         </td>
                     </tr>
                     @endforeach
@@ -64,6 +77,8 @@
                 </tbody>
             </table>
         </div>
+
+        <div class="mt-4">{{ $scores->links() }}</div>
 
         {{-- Formulier om een nieuwe score in te dienen --}}
         <div class="mt-8">

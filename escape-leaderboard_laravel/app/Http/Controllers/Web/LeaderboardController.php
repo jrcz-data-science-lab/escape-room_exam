@@ -21,12 +21,41 @@ class LeaderboardController extends Controller
      * - Haal top scores op
      * - Return view met data
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Haal de top 10 scores uit de database, gesorteerd van hoog naar laag.
-        $scores = Score::orderByDesc('score')->limit(10)->get();
+        // If a search query is provided, we want to show aggregated leaderboard by player
+        // using each player's best score and allow searching by player name.
+        $q = $request->query('q');
 
-        // Render de Blade view 'leaderboard.index' en geef de opgehaalde scores door
-        return view('leaderboard.index', compact('scores'));
+        // Build base query: aggregate best score per player
+        $base = Score::selectRaw('player_name, MAX(score) as best_score')
+            ->groupBy('player_name')
+            ->orderByDesc('best_score');
+
+        if ($q) {
+            $base = $base->where('player_name', 'like', '%' . $q . '%');
+        }
+
+        // Paginate results so the view can scale to hundreds of players
+        $perPage = 50;
+        $scores = $base->paginate($perPage)->withQueryString();
+
+        // If a specific player was searched (exact match), compute their global rank
+        $searchedRank = null;
+        if ($q) {
+            // Try to find exact best score for the queried player
+            $playerBest = Score::where('player_name', $q)->max('score');
+            if ($playerBest !== null) {
+                $higherCount = Score::selectRaw('player_name, MAX(score) as best_score')
+                    ->groupBy('player_name')
+                    ->havingRaw('MAX(score) > ?', [$playerBest])
+                    ->get()
+                    ->count();
+
+                $searchedRank = $higherCount + 1;
+            }
+        }
+
+        return view('leaderboard.index', compact('scores', 'q', 'searchedRank'));
     }
 }
