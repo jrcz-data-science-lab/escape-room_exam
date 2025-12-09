@@ -30,4 +30,8 @@ Route::middleware([AdminAuth::class])->prefix('admin')->name('admin.')->group(fu
     Route::put('/scores/{score}', [ScoreAdminController::class, 'update'])->name('scores.update');
     // Verwijderen van een score (DELETE)
     Route::delete('/scores/{score}', [ScoreAdminController::class, 'destroy'])->name('scores.destroy');
+    // Games management
+    Route::get('/games', [\App\Http\Controllers\Admin\GameAdminController::class, 'index'])->name('games.index');
+    Route::get('/games/create', [\App\Http\Controllers\Admin\GameAdminController::class, 'create'])->name('games.create');
+    Route::post('/games', [\App\Http\Controllers\Admin\GameAdminController::class, 'store'])->name('games.store');
 });
