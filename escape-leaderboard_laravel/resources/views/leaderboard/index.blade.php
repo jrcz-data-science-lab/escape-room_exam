@@ -29,56 +29,96 @@
         {{-- Titel van de pagina --}}
         <h1 class="text-4xl font-bold text-center mb-8">Leaderboard</h1>
 
-        {{-- Zoekveld en tabel met geaggregeerde scores per speler --}}
-        <div class="mb-6 max-w-md mx-auto">
-            <form method="GET" action="{{ route('leaderboard.index') }}" class="flex gap-2">
-                <input type="text" name="q" value="{{ isset($q) ? $q : '' }}" placeholder="Zoek op spelernaam" class="flex-1 border px-3 py-2 rounded">
-                <button type="submit" class="bg-gray-800 text-white px-4 py-2 rounded">Zoek</button>
-                <a href="{{ route('leaderboard.index') }}" class="ml-2 px-3 py-2 border rounded text-gray-700">Reset</a>
-            </form>
-            @if(isset($searchedRank) && $searchedRank)
-            <div class="mt-2 text-sm text-gray-700">Jouw positie: <strong>#{{ $searchedRank }}</strong></div>
-            @elseif(isset($q) && $q)
-            <div class="mt-2 text-sm text-gray-600">Geen exacte positie gevonden voor "{{ $q }}" (toon matches hieronder)</div>
-            @endif
+        @if(isset($game) && isset($scores))
+        <div class="mb-8 max-w-xl mx-auto">
+            <div class="mb-6 text-center">
+                <p class="text-xl font-bold text-gray-800 mb-1">Leaderboard voor: <span class="text-blue-700">{{ $game->name }}</span></p>
+                <p class="text-sm text-gray-500">Zoek je naam om te zien waar je staat — alleen je beste score wordt zichtbaar.</p>
+            </div>
+
+            <div class="mb-6 max-w-md mx-auto">
+                <form method="GET" action="{{ route('leaderboard.game', $game->slug) }}" class="flex gap-2">
+                    <input type="text" name="q" value="{{ isset($q) ? $q : '' }}" placeholder="Zoek op spelernaam" class="flex-1 border px-3 py-2 rounded">
+                    <button type="submit" class="bg-gray-800 text-white px-4 py-2 rounded">Zoek</button>
+                    <a href="{{ route('leaderboard.game', $game->slug) }}" class="ml-2 px-3 py-2 border rounded text-gray-700">Reset</a>
+                </form>
+                @if(isset($searchedRank) && $searchedRank)
+                <div class="mt-2 text-sm text-gray-700">Jouw positie: <strong>#{{ $searchedRank }}</strong></div>
+                @elseif(isset($q) && $q)
+                <div class="mt-2 text-sm text-gray-600">Geen exacte positie gevonden voor "{{ $q }}" (toon matches hieronder)</div>
+                @endif
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <table class="min-w-full">
+                    <thead class="bg-gray-800 text-white">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-sm font-semibold">#</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold">Speler</th>
+                            <th class="px-6 py-3 text-right text-sm font-semibold">Beste score</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @foreach($scores as $index => $row)
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ ($scores->currentPage() - 1) * $scores->perPage() + $index + 1 }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $row->player_name }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900 text-right font-mono">{{ number_format($row->best_score) }}</td>
+                        </tr>
+                        @endforeach
+                        @if($scores->isEmpty())
+                        <tr>
+                            <td colspan="3" class="px-6 py-4 text-sm text-gray-500 text-center">Nog geen scores beschikbaar voor deze escape room</td>
+                        </tr>
+                        @endif
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4">{{ $scores->links() }}</div>
         </div>
+        @else
+        <div class="mb-8 max-w-xl mx-auto">
+            <div class="mb-6 text-center">
+                <p class="text-lg text-gray-800">Dit zijn de <span class="font-bold">beste 10 scores</span> van <span class="font-bold">alle escape rooms</span>.</p>
+                <p class="text-sm text-gray-500">Je kunt de volledige leaderboards per escape room bekijken via de game-pagina's hieronder.</p>
+            </div>
 
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-            <table class="min-w-full">
-                <thead class="bg-gray-800 text-white">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-sm font-semibold">#</th>
-                        <th class="px-6 py-3 text-left text-sm font-semibold">Speler</th>
-                        <th class="px-6 py-3 text-right text-sm font-semibold">Beste score</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200">
-                    @foreach($scores as $index => $row)
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-6 py-4 text-sm font-medium text-gray-900">
-                            {{ ($scores->currentPage() - 1) * $scores->perPage() + $index + 1 }}
-                        </td>
-                        <td class="px-6 py-4 text-sm text-gray-900">
-                            {{ $row->player_name }}
-                        </td>
-                        <td class="px-6 py-4 text-sm text-gray-900 text-right font-mono">
-                            {{ number_format($row->best_score) }}
-                        </td>
-                    </tr>
-                    @endforeach
-
-                    @if($scores->isEmpty())
-                    <tr>
-                        <td colspan="3" class="px-6 py-4 text-sm text-gray-500 text-center">
-                            Nog geen scores beschikbaar
-                        </td>
-                    </tr>
-                    @endif
-                </tbody>
-            </table>
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <table class="min-w-full">
+                    <thead class="bg-gray-800 text-white">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-sm font-semibold">#</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold">Speler</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold">Score</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold">Escape room</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @forelse($topScores as $index => $row)
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $index+1 }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ $row->player_name }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900 font-mono">{{ number_format($row->score) }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-700">{{ $row->game ? $row->game->name : 'Onbekend' }}</td>
+                        </tr>
+                        @empty
+                        <tr><td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">Er zijn nog geen scores toegevoegd</td></tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
+        @endif
 
-        <div class="mt-4">{{ $scores->links() }}</div>
+        {{-- Links naar alle game leaderboards --}}
+        <div class="mb-4 max-w-xl mx-auto">
+            <h2 class="text-xl mb-2 font-semibold">Bekijk leaderboards per escape room:</h2>
+            <div class="flex flex-wrap gap-3">
+                @foreach($games as $g)
+                    <a href="{{ route('leaderboard.game', $g->slug) }}" class="bg-gray-200 text-gray-900 px-3 py-1 rounded hover:bg-gray-300">{{ $g->name }}</a>
+                @endforeach
+            </div>
+        </div>
 
         {{-- Formulier om een nieuwe score in te dienen --}}
         <div class="mt-8">
@@ -90,6 +130,20 @@
 
                 {{-- Plaats waar foutmeldingen of succesberichten verschijnen --}}
                 <div id="form-alert" class="hidden mb-4 text-sm"></div>
+
+                {{-- Selecteer game (per escape room) --}}
+                @if(isset($games) && $games->isNotEmpty())
+                <div class="mb-3">
+                    <label class="block mb-2 text-sm">Selecteer escape room</label>
+                    <select id="game_select" name="game_slug" class="w-full border px-3 py-2 rounded mb-2">
+                        @foreach($games as $g)
+                        <option value="{{ $g->slug }}" @if(isset($game) && $game->id == $g->id) selected @endif>{{ $g->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                @else
+                <p class="text-red-500 mb-3">Geen escape rooms beschikbaar. Neem contact op met de admin om games toe te voegen.</p>
+                @endif
 
                 {{-- Token invoerveld (masked) en knop om deze tijdelijk zichtbaar te maken --}}
                 <label class="block mb-2">Token</label>
@@ -112,7 +166,7 @@
 
                 {{-- Verzenden knop --}}
                 <div class="flex justify-center items-center">
-                    <button id="submitBtn" class="bg-blue-600 text-white px-4 py-2 rounded">Verstuur score</button>
+                    <button id="submitBtn" class="bg-blue-600 text-white px-4 py-2 rounded @if(!isset($games) || $games->isEmpty()) disabled @endif">Verstuur score</button>
                 </div>
             </div>
 
@@ -192,6 +246,20 @@
 
             // Do not persist token client-side. It stays only in the input for this session.
 
+            // determine selected game slug (if select exists)
+            let gameSlug = null;
+            const gameSelect = document.getElementById('game_select');
+            if (gameSelect) {
+                gameSlug = gameSelect.value;
+            } else {
+                // If the page was rendered for a specific game, Blade provides $game
+            }
+
+            if (!gameSlug) {
+                showAlert('Selecteer een escape room');
+                return;
+            }
+
             try {
                 const res = await fetch('/api/scores', {
                     method: 'POST',
@@ -202,7 +270,8 @@
                     },
                     body: JSON.stringify({
                         player_name,
-                        score: parseInt(score, 10)
+                        score: parseInt(score, 10),
+                        game_slug: gameSlug
                     })
                 });
 
@@ -219,7 +288,8 @@
                     showAlert('Fout bij toevoegen (status ' + res.status + ')');
                 }
             } catch (err) {
-                showAlert('Netwerkfout: ' + err.message);
+                console.error('Error submitting score:', err);
+                showAlert('Fout bij toevoegen (netwerkfout)');
             }
         });
     </script>

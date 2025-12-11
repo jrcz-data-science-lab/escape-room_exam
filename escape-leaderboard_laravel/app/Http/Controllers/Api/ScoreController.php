@@ -1,49 +1,49 @@
 <?php
 
+// API-controller voor het ontvangen en opslaan van nieuwe scores via een beveiligde POST-call.
 namespace App\Http\Controllers\Api;
-// Namespace: waar deze controller zich bevindt binnen de applicatie.
 
+// Basis controller
 use App\Http\Controllers\Controller;
-// Import van de basis Controller zodat we er van kunnen erven.
-
+// Model voor scores
 use App\Models\Score;
-// Import van het Score model om records aan te maken.
-
+// Request voor validatie/input
 use Illuminate\Http\Request;
-// Import van Request voor validatie en toegang tot input.
 
 class ScoreController extends Controller
 {
     /**
-     * API-controller voor het ontvangen en opslaan van nieuwe scores.
-     *
-     * Kort overzicht (NL):
-     * - Validateer inkomende data
-     * - Maak nieuw Score record met mass-assignment
-     * - Retourneer JSON met HTTP 201
+     * Sla een nieuwe score op (aangeroepen door de game via /api/scores).
+     * - Valideert invoer
+     * - Koppelt score aan de juiste game (via slug of naam)
+     * - Maakt de score aan en geeft JSON 201 terug
      */
     public function store(Request $request)
     {
-        // Server-side validatie: altijd afdwingen (onbetrouwbaar om dit alleen client-side te doen)
+        // Valideer verplichte velden: game_slug, score (min 0), spelernaam
         $validated = $request->validate([
             'game_slug' => 'required|string',
-            'score' => 'required|integer|min:0', // score moet een integer zijn en minimaal 0
-            'player_name' => 'required|string|max:255' // speler naam is verplicht, max 255 tekens
+            'score' => 'required|integer|min:0',
+            'player_name' => 'required|string|max:255'
         ]);
 
-        // Zoek het spel op basis van slug of naam
-        $game = \App\Models\Game::where('slug', $validated['game_slug'])->orWhere('name', $validated['game_slug'])->first();
-        if ($game) {
-            $validated['game_id'] = $game->id;
-        } else {
-            // Als game niet bestaat, weiger of maak geen nieuwe aan zonder admin
+        // Zoek de game op slug of naam, zodat we het game_id kunnen invullen
+        $game = \App\Models\Game::where('slug', $validated['game_slug'])
+            ->orWhere('name', $validated['game_slug'])
+            ->first();
+
+        // Als de game niet bestaat: geef een foutmelding
+        if (! $game) {
             return response()->json(['message' => 'Unknown game'], 422);
         }
 
-        // Mass-assignment: zorg dat $fillable correct is ingesteld in het model
+        // Voeg het game_id toe aan de gevalideerde data
+        $validated['game_id'] = $game->id;
+
+        // Maak de score aan via mass-assignment
         $score = Score::create($validated);
 
-        // Return de nieuw aangemaakte resource met status 201 (Created)
+        // Geef de nieuw aangemaakte score terug met HTTP status 201
         return response()->json($score, 201);
     }
 }

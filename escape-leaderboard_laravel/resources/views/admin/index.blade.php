@@ -22,6 +22,10 @@
     </nav>
 
     <div class="container mx-auto p-6">
+        {{-- Games beheer knop --}}
+        <div class="flex justify-end mb-5">
+            <a href="{{ route('admin.games.index') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded">Games beheren</a>
+        </div>
         {{-- Kop met titel en logout knop voor admins --}}
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-2xl">Beheer Scores</h1>

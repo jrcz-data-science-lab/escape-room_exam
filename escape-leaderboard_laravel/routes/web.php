@@ -13,6 +13,9 @@ use App\Http\Middleware\AdminAuth;
 Route::get('/', [\App\Http\Controllers\Web\LeaderboardController::class, 'index'])
     ->name('leaderboard.index');
 
+// Per-game leaderboard pagina
+Route::get('/games/{slug}', [\App\Http\Controllers\Web\LeaderboardController::class, 'showGame'])->name('leaderboard.game');
+
 // Admin authenticatie routes (login form en login POST)
 Route::get('/admin/login', [AuthController::class, 'showLogin'])->name('admin.login');
 Route::post('/admin/login', [AuthController::class, 'login'])->name('admin.login.post');
@@ -34,4 +37,5 @@ Route::middleware([AdminAuth::class])->prefix('admin')->name('admin.')->group(fu
     Route::get('/games', [\App\Http\Controllers\Admin\GameAdminController::class, 'index'])->name('games.index');
     Route::get('/games/create', [\App\Http\Controllers\Admin\GameAdminController::class, 'create'])->name('games.create');
     Route::post('/games', [\App\Http\Controllers\Admin\GameAdminController::class, 'store'])->name('games.store');
+    Route::post('/games/{game}/scores', [\App\Http\Controllers\Admin\GameAdminController::class, 'addScore'])->name('games.addScore');
 });

@@ -1,5 +1,6 @@
 <?php
 
+// Het User model representeert een (admin) gebruiker die kan inloggen.
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -10,23 +11,21 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
+    // HasFactory: maakt factories voor testen/seeding mogelijk
+    // Notifiable: biedt notificatie-mogelijkheden
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
+     * Velden die via mass-assignment ingevuld mogen worden
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'name',     // Gebruikersnaam
+        'email',    // Emailadres van de gebruiker
+        'password', // Gehashed wachtwoord
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
+     * Velden die verborgen moeten blijven bij serialisatie (bv. naar JSON)
      */
     protected $hidden = [
         'password',
@@ -34,9 +33,8 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Type-casts voor velden; password wordt automatisch gehashed,
+     * email_verified_at wordt naar datetime gecast.
      */
     protected function casts(): array
     {
