@@ -59,9 +59,9 @@ class LeaderboardController extends Controller
             ->groupBy('player_name')
             ->orderByDesc('best_score');
 
-        // Pas eventueel filtering toe (zoekfunctie op naam)
+        // Pas eventueel filtering toe (zoekfunctie op naam, prefix-match)
         if ($q) {
-            $base = $base->where('player_name', 'like', '%' . $q . '%');
+            $base = $base->where('player_name', 'like', $q . '%');
         }
 
         // Laat maximaal 50 resultaten per pagina zien

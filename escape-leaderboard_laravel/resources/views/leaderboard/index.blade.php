@@ -36,9 +36,9 @@
                 <p class="text-sm text-gray-500">Zoek je naam om te zien waar je staat — alleen je beste score wordt zichtbaar.</p>
             </div>
 
-            <div class="mb-6 max-w-md mx-auto">
+            <div class="mb-6 max-w-md mx-auto relative">
                 <form method="GET" action="{{ route('leaderboard.game', $game->slug) }}" class="flex gap-2">
-                    <input type="text" name="q" value="{{ isset($q) ? $q : '' }}" placeholder="Zoek op spelernaam" class="flex-1 border px-3 py-2 rounded">
+                    <input id="player-search" type="text" name="q" value="{{ isset($q) ? $q : '' }}" placeholder="Zoek op spelernaam" class="flex-1 border px-3 py-2 rounded" autocomplete="off">
                     <button type="submit" class="bg-gray-800 text-white px-4 py-2 rounded">Zoek</button>
                     <a href="{{ route('leaderboard.game', $game->slug) }}" class="ml-2 px-3 py-2 border rounded text-gray-700">Reset</a>
                 </form>
@@ -47,6 +47,9 @@
                 @elseif(isset($q) && $q)
                 <div class="mt-2 text-sm text-gray-600">Geen exacte positie gevonden voor "{{ $q }}" (toon matches hieronder)</div>
                 @endif
+
+                {{-- Suggestielijst voor realtime zoeken --}}
+                <div id="player-suggestions" class="absolute z-10 w-full bg-white border rounded shadow hidden"></div>
             </div>
 
             <div class="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -182,6 +185,15 @@
         Ze blijven alleen in het invoerveld aanwezig terwijl de pagina open is.
     --}}
     <script>
+        // Debounce helper om API-calls te beperken
+        function debounce(fn, delay = 200) {
+            let t;
+            return (...args) => {
+                clearTimeout(t);
+                t = setTimeout(() => fn(...args), delay);
+            };
+        }
+
         // Auto-refresh elke 30 seconden
         setInterval(() => {
             // only reload if not currently filling the form
@@ -292,6 +304,69 @@
                 showAlert('Fout bij toevoegen (netwerkfout)');
             }
         });
+
+        // Realtime speler-zoek (typeahead) voor per-game pagina
+        const searchInput = document.getElementById('player-search');
+        const suggestionsBox = document.getElementById('player-suggestions');
+
+        if (searchInput && suggestionsBox) {
+            const fetchSuggestions = debounce(async (value) => {
+                const query = value.trim();
+                if (!query) {
+                    suggestionsBox.classList.add('hidden');
+                    suggestionsBox.innerHTML = '';
+                    return;
+                }
+
+                try {
+                    const params = new URLSearchParams();
+                    params.set('q', query);
+                    const gameSlug = "{{ isset($game) ? $game->slug : '' }}";
+                    if (gameSlug) {
+                        params.set('game_slug', gameSlug);
+                    }
+
+                    const res = await fetch(`/api/players?${params.toString()}`);
+                    if (!res.ok) throw new Error('Suggesties ophalen mislukt');
+                    const names = await res.json();
+
+                    if (!names.length) {
+                        suggestionsBox.classList.add('hidden');
+                        suggestionsBox.innerHTML = '';
+                        return;
+                    }
+
+                    suggestionsBox.innerHTML = names.map(name => `
+                        <button type="button" class="w-full text-left px-3 py-2 hover:bg-gray-100 text-sm suggestion-item">${name}</button>
+                    `).join('');
+                    suggestionsBox.classList.remove('hidden');
+
+                    // Klik op suggestie: vul veld en verstuur formulier
+                    suggestionsBox.querySelectorAll('.suggestion-item').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            searchInput.value = btn.textContent;
+                            suggestionsBox.classList.add('hidden');
+                            suggestionsBox.innerHTML = '';
+                        });
+                    });
+                } catch (err) {
+                    console.error(err);
+                    suggestionsBox.classList.add('hidden');
+                    suggestionsBox.innerHTML = '';
+                }
+            }, 200);
+
+            searchInput.addEventListener('input', (e) => {
+                fetchSuggestions(e.target.value);
+            });
+
+            // Verberg suggesties bij verlies van focus (kleine delay om klikken toe te laten)
+            searchInput.addEventListener('blur', () => {
+                setTimeout(() => {
+                    suggestionsBox.classList.add('hidden');
+                }, 150);
+            });
+        }
     </script>
 </body>
 

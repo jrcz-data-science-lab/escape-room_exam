@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ScoreController;
+use App\Http\Controllers\Api\PlayerSearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +26,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // maximaal 30 verzoeken per minuut per IP-adres. Overschrijding levert HTTP 429 op.
 Route::post('/scores', [ScoreController::class, 'store'])
     ->middleware(['leaderboard.token', 'throttle:30,1']);
+
+// Publieke endpoint voor realtime spelers-zoek (typeahead), optioneel per game_slug
+Route::get('/players', [PlayerSearchController::class, 'index'])
+    ->middleware(['throttle:30,1']);
