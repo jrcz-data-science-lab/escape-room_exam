@@ -1,4 +1,56 @@
-# Todo Export
+# Trello-ready export (kopiëren/plakken)
+
+## Projectplanning (CREBO 25604)
+- Analyse → Ontwerp → Realisatie → Test → Oplevering
+- Analyse: eisen (publiek leaderboard, per-game leaderboard + zoek, admin-beheer, beveiligde score-API)
+- Ontwerp: modellen (Game, Score), routes/API (/api/scores, /api/players), per-game views, tokens per game, admin-auth
+- Realisatie: Laravel MVC, Eloquent, middleware token, typeahead-API, Blade views
+- Test: handmatige cases per user story (zie testcases)
+- Oplevering: werkende app met documentatie
+
+## Scrum-kolommen (Trello)
+- Backlog
+- Sprint To Do
+- In Progress
+- Testing
+- Done
+
+## User stories + acceptatiecriteria
+- US1 Top-10: Hoofdpagina toont 10 hoogste scores met speler + game; publiek.
+- US2 Per-game leaderboard: /games/{slug}, beste score per speler, prefix-zoek, paginatie 50.
+- US3 Typeahead: tijdens typen suggesties (prefix, max 10, debounce), klik vult veld.
+- US4 Games toevoegen (admin): slug auto als leeg, uniek token éénmalig tonen, alleen admin.
+- US5 Scorebeheer (admin): lijst/edit/delete, quick add zonder token per game.
+- US6 Score-API: POST /api/scores met X-Token, valideert game_slug/score/player, 201/401/422.
+- US7 Typeahead-API: GET /api/players?q=...&game_slug=..., distinct prefix, limit 10, throttle 30/min.
+- US8 Security/rate-limit: token-middleware scores, admin-auth, throttle API.
+- US9 Publiek: hoofd- en per-game leaderboards zonder login zichtbaar.
+
+## Security (implementatie)
+- Per-game token voor POST scores (X-Token); middleware CheckLeaderboardApiToken.
+- Admin-routes achter admin-auth.
+- Rate limiting: /api/scores en /api/players throttle 30/min.
+- Eloquent/validatie, geen raw SQL; tokens niet opgeslagen in localStorage.
+
+## Dataflow
+- Publiek: browser → web routes → controllers → views → DB (Eloquent).
+- Per-game: optioneel q (prefix) → MAX score per speler → paginate.
+- Typeahead: frontend fetch /api/players (prefix, opt game_slug) → JSON namen.
+- Scores API: game_slug + X-Token → valideer → maak Score (koppel game).
+- Admin: browser (ingelogd) → admin-routes → beheer games/scores.
+
+## Architectuur
+- Laravel MVC: Models (Game, Score, User), Controllers (Web, Admin, Api), Middleware (token, admin-auth), Views (Blade).
+- Relaties: Game hasMany Scores; Score belongsTo Game.
+- Routes: web (publiek/admin), api (scores, players).
+
+## Testcases (kort)
+- Typeahead: q=test → test4/test5; leeg → geen lijst; onbekende prefix → geen resultaten.
+- Per-game zoek: q=te toont namen die beginnen met “te”; paginatie werkt.
+- Score-API: correct token 201; fout token 401; onbekende game_slug 422.
+- Admin games: create zonder slug → slug auto; token getoond; unieke slug bij duplicaat.
+- Admin scores: edit/delete; quick add koppelt juiste game.
+- Rate-limit: >30 req/min op /api/players of /api/scores → 429.
 
 Deze file bevat de volledige takenlijst (Trello-ready) voor het project en examenbewijzen.
 
