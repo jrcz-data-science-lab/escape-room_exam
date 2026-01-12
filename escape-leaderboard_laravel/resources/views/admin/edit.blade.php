@@ -1,48 +1,49 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="nl">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Edit Score</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ asset('css/leaderboard.css') }}">
 </head>
 
-<body class="bg-gray-100">
-    <nav class="bg-white shadow-sm">
-        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-            <a href="{{ route('leaderboard.index') }}" class="text-lg font-semibold">Leaderboard</a>
-            <div>
-                <a href="{{ route('admin.index') }}" class="mr-4 text-sm text-gray-700">Admin</a>
-                <a href="{{ route('leaderboard.index') }}" class="mr-4 text-sm text-gray-700">Home</a>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="{{ route('leaderboard.index') }}" class="navbar-title">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="navbar-logo" />
+                <span class="navbar-title-text">Leaderboard</span>
+            </a>
+            <div class="navbar-links">
+                <a href="{{ route('admin.index') }}">Admin</a>
+                <a href="{{ route('leaderboard.index') }}">Home</a>
                 <form method="POST" action="{{ route('admin.logout') }}" style="display:inline">@csrf
-                    <button class="text-sm text-red-600">Logout</button>
+                    <button type="submit">Logout</button>
                 </form>
             </div>
         </div>
     </nav>
 
-    <div class="container mx-auto p-6">
-        {{-- Pagina kop - toont welke score we aanpassen --}}
-        <h1 class="text-2xl mb-4">Aanpassen score #{{ $score->id }}</h1>
+    <div class="home-container">
+        <div class="admin-wrapper" style="max-width: 600px;">
+            <h1 class="admin-title">Aanpassen score #{{ $score->id }}</h1>
 
-        {{-- Formulier om een score te updaten (PUT) --}}
-        <form method="POST" action="{{ route('admin.scores.update', $score->id) }}">@csrf @method('PUT')
-            <div class="mb-4">
-                <label class="block mb-1">Speler</label>
-                {{-- Vult het veld met oude input of het huidige model attribuut --}}
-                <input name="player_name" value="{{ old('player_name', $score->player_name) }}" class="w-full border px-3 py-2 rounded" />
-            </div>
-            <div class="mb-4">
-                <label class="block mb-1">Score</label>
-                <input name="score" value="{{ old('score', $score->score) }}" class="w-full border px-3 py-2 rounded" />
-            </div>
-            <div>
-                {{-- Opslaan knop en annuleren link --}}
-                <button class="bg-blue-600 text-white px-4 py-2 rounded">Opslaan</button>
-                <a href="{{ route('admin.index') }}" class="ml-2">Annuleer</a>
-            </div>
-        </form>
+            <form method="POST" action="{{ route('admin.scores.update', $score->id) }}" style="background: rgba(255, 255, 255, 0.95); padding: 35px; border-radius: 20px; box-shadow: var(--shadow-md);">@csrf @method('PUT')
+                <div class="form-group">
+                    <label>Speler</label>
+                    <input name="player_name" value="{{ old('player_name', $score->player_name) }}" required />
+                </div>
+                <div class="form-group">
+                    <label>Score</label>
+                    <input name="score" type="number" min="0" value="{{ old('score', $score->score) }}" required />
+                </div>
+                <div class="button-group">
+                    <a href="{{ route('admin.index') }}" class="btn btn-secondary">Annuleer</a>
+                    <button type="submit" class="btn">Opslaan</button>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 

@@ -1,83 +1,76 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="nl">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Scores</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ asset('css/leaderboard.css') }}">
 </head>
 
-<body class="bg-gray-100">
-    <nav class="bg-white shadow-sm">
-        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-            <a href="{{ route('leaderboard.index') }}" class="text-lg font-semibold">Leaderboard</a>
-            <div>
-                <a href="{{ route('leaderboard.index') }}" class="mr-4 text-sm text-gray-700">Home</a>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="{{ route('leaderboard.index') }}" class="navbar-title">
+                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="navbar-logo" />
+                <span class="navbar-title-text">Leaderboard</span>
+            </a>
+            <div class="navbar-links">
+                <a href="{{ route('leaderboard.index') }}">Home</a>
                 <form method="POST" action="{{ route('admin.logout') }}" style="display:inline">@csrf
-                    <button class="text-sm text-red-600">Logout</button>
+                    <button type="submit">Logout</button>
                 </form>
             </div>
         </div>
     </nav>
 
-    <div class="container mx-auto p-6">
-        {{-- Games beheer knop --}}
-        <div class="flex justify-end mb-5">
-            <a href="{{ route('admin.games.index') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded">Games beheren</a>
-        </div>
-        {{-- Kop met titel en logout knop voor admins --}}
-        <div class="flex justify-between items-center mb-4">
-            <h1 class="text-2xl">Beheer Scores</h1>
-            <div>
-                {{-- Logout formulier (POST) om sessie te verwijderen --}}
-                <form method="POST" action="{{ route('admin.logout') }}">@csrf
-                    <button class="bg-red-500 text-white px-3 py-1 rounded">Logout</button>
-                </form>
+    <div class="home-container">
+        <div class="admin-wrapper">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 15px;">
+                <h1 class="admin-title" style="margin: 0;">Beheer Scores</h1>
+                <a href="{{ route('admin.games.index') }}" class="btn">Games beheren</a>
             </div>
-        </div>
 
-        {{-- Toon succesmelding als die in de sessie aanwezig is --}}
-        @if(session('success'))
-        <div class="bg-green-100 text-green-800 p-2 rounded mb-4">{{ session('success') }}</div>
-        @endif
+            @if(session('success'))
+            <div class="form-alert success">
+                {{ session('success') }}
+            </div>
+            @endif
 
-        {{-- Tabel met alle individuele score records --}}
-        <div class="bg-white rounded shadow overflow-hidden">
-            <table class="min-w-full">
-                <thead class="bg-gray-800 text-white">
+            <table class="admin-table">
+                <thead>
                     <tr>
-                        <th class="px-4 py-2">#</th>
-                        <th class="px-4 py-2">Speler</th>
-                        <th class="px-4 py-2">Score</th>
-                        <th class="px-4 py-2">Aangemaakt</th>
-                        <th class="px-4 py-2">Acties</th>
+                        <th>#</th>
+                        <th>Speler</th>
+                        <th>Score</th>
+                        <th>Aangemaakt</th>
+                        <th>Acties</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- Loop door de paginated scores en toon id, speler, score en acties --}}
                     @foreach($scores as $s)
-                    <tr class="border-t">
-                        <td class="px-4 py-2">{{ $s->id }}</td>
-                        <td class="px-4 py-2">{{ $s->player_name }}</td>
-                        <td class="px-4 py-2">{{ $s->score }}</td>
-                        <td class="px-4 py-2">{{ $s->created_at }}</td>
-                        <td class="px-4 py-2">
-                            {{-- Link naar bewerkpagina voor deze score --}}
-                            <a href="{{ route('admin.scores.edit', $s->id) }}" class="text-blue-600 mr-2">Aanpassen</a>
-                            {{-- Formulier om dit record te verwijderen --}}
-                            <form method="POST" action="{{ route('admin.scores.destroy', $s->id) }}" style="display:inline">@csrf @method('DELETE')
-                                <button class="text-red-600" onclick="return confirm('Weet je het zeker?')">Verwijder</button>
-                            </form>
+                    <tr>
+                        <td>{{ $s->id }}</td>
+                        <td class="player-name">{{ $s->player_name }}</td>
+                        <td class="score-value">{{ number_format($s->score) }}</td>
+                        <td>{{ $s->created_at->format('d-m-Y H:i') }}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{{ route('admin.scores.edit', $s->id) }}" class="btn" style="padding: 8px 16px; font-size: 0.85rem;">Aanpassen</a>
+                                <form method="POST" action="{{ route('admin.scores.destroy', $s->id) }}" style="display:inline">@csrf @method('DELETE')
+                                    <button type="submit" class="delete-btn" onclick="return confirm('Weet je het zeker?')">Verwijder</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
-        </div>
 
-        {{-- Paginatie links voor de scores --}}
-        <div class="mt-4">{{ $scores->links() }}</div>
+            <div class="pagination">
+                {{ $scores->links() }}
+            </div>
+        </div>
     </div>
 </body>
 
