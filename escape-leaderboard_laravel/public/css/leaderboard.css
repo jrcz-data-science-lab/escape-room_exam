@@ -406,16 +406,11 @@ h3 {
   font-size: 1.5rem;
 }
 
-.rank-2 {
-  background: linear-gradient(135deg, #c0c0c0, #b8b8b8) !important;
-  color: var(--bg-primary) !important;
-  font-weight: 700;
-}
-
+.rank-2,
 .rank-3 {
-  background: linear-gradient(135deg, #cd7f32, #b87333) !important;
-  color: white !important;
-  font-weight: 700;
+  background: transparent !important;
+  color: var(--text-light) !important;
+  font-weight: 600;
 }
 
 .rank-number {
