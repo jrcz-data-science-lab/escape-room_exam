@@ -2,6 +2,25 @@
 
 namespace Tests\Unit;
 
+use Tests\TestCase;
+use App\Models\Score;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+class ScoreModelTest extends TestCase
+{
+    public function test_game_relationship()
+    {
+        $score = new Score();
+        $relation = $score->game();
+
+        $this->assertInstanceOf(BelongsTo::class, $relation);
+        $this->assertEquals('game_id', $relation->getForeignKeyName());
+    }
+}
+<?php
+
+namespace Tests\Unit;
+
 use PHPUnit\Framework\TestCase;
 use App\Models\Score;
 
