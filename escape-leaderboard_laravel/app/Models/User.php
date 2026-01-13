@@ -36,11 +36,8 @@ class User extends Authenticatable
      * Type-casts voor velden; password wordt automatisch gehashed,
      * email_verified_at wordt naar datetime gecast.
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
 }
