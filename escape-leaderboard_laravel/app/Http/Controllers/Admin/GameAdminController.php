@@ -67,14 +67,20 @@ class GameAdminController extends Controller
             ->with('new_game_slug', $game->slug);
     }
 
-    // Admin-only: snelle score toevoegen aan een game (zonder API-token)
+    // Admin-only: snelle score toevoegen aan een game (met API-token verificatie)
     public function addScore(Request $request, Game $game)
     {
-        // Valideer spelernaam en score
+        // Valideer spelernaam, score en API-token
         $validated = $request->validate([
             'player_name' => 'required|string|max:255',
             'score' => 'required|integer|min:0',
+            'api_token' => 'required|string',
         ]);
+
+        // Controleer of de API-token overeenkomt met die van de game
+        if ($validated['api_token'] !== $game->api_token) {
+            return back()->withErrors(['api_token' => 'Ongeldige API-token voor deze game.']);
+        }
 
         // Maak de score aan, koppel hem direct aan de juiste game
         $score = Score::create([

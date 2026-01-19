@@ -52,6 +52,7 @@
                         @csrf
                         <input name="player_name" placeholder="Speler naam" style="flex: 1; min-width: 150px;" required>
                         <input name="score" placeholder="Score" type="number" min="0" style="width: 100px;" required>
+                        <input name="api_token" placeholder="API Token" type="password" style="flex: 1; min-width: 150px;" required>
                         <button type="submit" class="btn" style="flex: 1; min-width: 120px;">Snelle toevoeging</button>
                     </form>
                 </div>
