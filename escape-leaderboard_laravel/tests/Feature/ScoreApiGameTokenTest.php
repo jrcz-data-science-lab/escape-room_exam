@@ -38,18 +38,13 @@ class ScoreApiGameTokenTest extends TestCase
         $response->assertStatus(401);
     }
 
-    public function test_global_token_fallback_works()
+    public function test_post_score_without_game_slug_returns_401()
     {
-        config(['services.leaderboard.api_token' => 'global-token-xyz']);
-        $game = Game::create(["name" => "Test Game 3", "slug" => "test-game-3", "api_token" => 'token-zzz']);
-
         $response = $this->postJson('/api/scores', [
-            'game_slug' => 'test-game-3',
-            'player_name' => 'Carol',
-            'score' => 75,
-        ], ['X-Token' => 'global-token-xyz']);
+            'player_name' => 'Dave',
+            'score' => 25,
+        ], ['X-Token' => 'some-token']);
 
-        $response->assertStatus(201);
-        $this->assertDatabaseHas('scores', ['player_name' => 'Carol', 'score' => 75, 'game_id' => $game->id]);
+        $response->assertStatus(401);
     }
 }
