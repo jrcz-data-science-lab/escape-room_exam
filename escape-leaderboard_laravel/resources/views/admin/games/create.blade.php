@@ -41,21 +41,20 @@
             </div>
             @endif
 
-            <form method="POST" action="{{ route('admin.games.store') }}" style="background: rgba(255, 255, 255, 0.95); padding: 35px; border-radius: 20px; box-shadow: var(--shadow-md);">
-                @csrf
+            <form method="POST" action="{{ route('admin.games.store') }}" class="form-group">@csrf
                 <div class="form-group">
-                    <label>Naam</label>
+                    <label style="color: rgba(255, 255, 255, 0.95) !important;">Naam</label>
                     <input name="name" required value="{{ old('name') }}">
                     @error('name') <p style="color: var(--danger-red); font-size: 14px; margin-top: 8px;">{{ $message }}</p> @enderror
                 </div>
                 <div class="form-group">
-                    <label>Slug (optioneel)</label>
+                    <label style="color: rgba(255, 255, 255, 0.95) !important;">Slug (optioneel)</label>
                     <input name="slug" value="{{ old('slug') }}">
                     <p class="info-text">Wordt gebruikt in de URL (bv. escape-1). Leeg laten genereert automatisch een slug.</p>
                     @error('slug') <p style="color: var(--danger-red); font-size: 14px; margin-top: 8px;">{{ $message }}</p> @enderror
                 </div>
                 <div class="form-group">
-                    <label>Omschrijving (optioneel)</label>
+                    <label style="color: rgba(255, 255, 255, 0.95) !important;">Omschrijving (optioneel)</label>
                     <textarea name="description" style="min-height: 120px; resize: vertical;">{{ old('description') }}</textarea>
                     @error('description') <p style="color: var(--danger-red); font-size: 14px; margin-top: 8px;">{{ $message }}</p> @enderror
                 </div>

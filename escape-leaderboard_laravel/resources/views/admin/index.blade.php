@@ -37,7 +37,7 @@
             </div>
             @endif
 
-            <table class="admin-table">
+            <table class="leaderboard-table">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -48,9 +48,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($scores as $s)
-                    <tr>
-                        <td>{{ $s->id }}</td>
+                    @foreach($scores as $index => $s)
+                    <tr class="@if($index === 0) rank-1 @endif">
+                        <td class="rank-number">{{ $s->id }}</td>
                         <td class="player-name">{{ $s->player_name }}</td>
                         <td class="score-value">{{ number_format($s->score) }}</td>
                         <td>{{ $s->created_at->format('d-m-Y H:i') }}</td>

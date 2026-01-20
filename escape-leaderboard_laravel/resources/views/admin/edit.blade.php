@@ -29,13 +29,13 @@
         <div class="admin-wrapper" style="max-width: 600px;">
             <h1 class="admin-title">Aanpassen score #{{ $score->id }}</h1>
 
-            <form method="POST" action="{{ route('admin.scores.update', $score->id) }}" style="background: rgba(255, 255, 255, 0.95); padding: 35px; border-radius: 20px; box-shadow: var(--shadow-md);">@csrf @method('PUT')
+            <form method="POST" action="{{ route('admin.scores.update', $score->id) }}" class="form-group">@csrf @method('PUT')
                 <div class="form-group">
-                    <label>Speler</label>
+                    <label style="color: rgba(255, 255, 255, 0.95) !important;">Speler</label>
                     <input name="player_name" value="{{ old('player_name', $score->player_name) }}" required />
                 </div>
                 <div class="form-group">
-                    <label>Score</label>
+                    <label style="color: rgba(255, 255, 255, 0.95) !important;">Score</label>
                     <input name="score" type="number" min="0" value="{{ old('score', $score->score) }}" required />
                 </div>
                 <div class="button-group">
