@@ -53,6 +53,7 @@
                         <input name="player_name" placeholder="Speler naam" style="flex: 1; min-width: 150px;" required>
                         <input name="score" placeholder="Score" type="number" min="0" style="width: 100px;" required>
                         <input name="api_token" placeholder="API Token" type="password" style="flex: 1; min-width: 150px;" required>
+                        @error('api_token') <p style="color: var(--danger-red); font-size: 14px; margin-top: 8px; flex-basis: 100%;">{{ $message }}</p> @enderror
                         <button type="submit" class="btn" style="flex: 1; min-width: 120px;">Snelle toevoeging</button>
                     </form>
                 </div>

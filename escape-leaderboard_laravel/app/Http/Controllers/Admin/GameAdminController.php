@@ -79,7 +79,7 @@ class GameAdminController extends Controller
 
         // Controleer of de API-token overeenkomt met die van de game
         if ($validated['api_token'] !== $game->api_token) {
-            return back()->withErrors(['api_token' => 'Ongeldige API-token voor deze game.']);
+            return back()->withErrors(['api_token' => 'Het token is onjuist.']);
         }
 
         // Maak de score aan, koppel hem direct aan de juiste game
