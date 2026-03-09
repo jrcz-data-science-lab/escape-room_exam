@@ -37,6 +37,12 @@
             </div>
             @endif
 
+            @if(session('error'))
+            <div class="form-alert error">
+                {{ session('error') }}
+            </div>
+            @endif
+
             <div class="games-grid">
                 @foreach($games as $game)
                 <div class="game-card">
@@ -52,10 +58,16 @@
                         @csrf
                         <input name="player_name" placeholder="Speler naam" style="flex: 1; min-width: 150px;" required>
                         <input name="score" placeholder="Score" type="number" min="0" style="width: 100px;" required>
-                        <input name="api_token" placeholder="API Token" type="password" style="flex: 1; min-width: 150px;" required>
+                        <input name="api_token" type="password" style="flex: 1; min-width: 150px;" required autocomplete="new-password" placeholder="••••••••••" formnovalidate>
                         @error('api_token') <p style="color: var(--danger-red); font-size: 14px; margin-top: 8px; flex-basis: 100%;">{{ $message }}</p> @enderror
                         <button type="submit" class="btn" style="flex: 1; min-width: 120px;">Snelle toevoeging</button>
                     </form>
+                    <div style="margin-top: 15px; display: flex; gap: 10px;">
+                        <form method="POST" action="{{ route('admin.games.destroy', $game->id) }}" style="display:inline;">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="delete-btn" onclick="return confirm('Weet je zeker dat je de game &quot;{{ $game->name }}&quot; en alle bijbehorende scores wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.')" style="padding: 8px 16px; font-size: 0.85rem;">Verwijderen</button>
+                        </form>
+                    </div>
                 </div>
                 @endforeach
             </div>

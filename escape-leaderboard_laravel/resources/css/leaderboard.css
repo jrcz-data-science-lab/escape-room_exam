@@ -597,11 +597,20 @@ textarea:focus {
     outline: none;
     border-color: var(--primary-purple);
     box-shadow:
-        0 0 0 4px rgba(139, 92, 246, 0.2),
-        var(--shadow-md);
-    transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.95);
-    color: var(--text-dark);
+        0 0 0 3px rgba(139, 92, 246, 0.1),
+        0 0 20px rgba(139, 92, 246, 0.2);
+    background: white;
+    color: #333333;
+    transform: translateY(-1px);
+}
+
+input[type="password"] {
+    -webkit-text-security: disc;
+    letter-spacing: 2px;
+}
+
+input[type="password"]:focus {
+    letter-spacing: 0px;
 }
 
 input::placeholder,

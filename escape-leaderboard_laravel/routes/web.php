@@ -38,4 +38,5 @@ Route::middleware([AdminAuth::class])->prefix('admin')->name('admin.')->group(fu
     Route::get('/games/create', [\App\Http\Controllers\Admin\GameAdminController::class, 'create'])->name('games.create');
     Route::post('/games', [\App\Http\Controllers\Admin\GameAdminController::class, 'store'])->name('games.store');
     Route::post('/games/{game}/scores', [\App\Http\Controllers\Admin\GameAdminController::class, 'addScore'])->name('games.addScore');
+    Route::delete('/games/{game}', [\App\Http\Controllers\Admin\GameAdminController::class, 'destroy'])->name('games.destroy');
 });

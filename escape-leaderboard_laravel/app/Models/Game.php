@@ -18,4 +18,10 @@ class Game extends Model
         'description', // Korte omschrijving van de game
         'api_token'    // Per-game API token voor beveiligde score-submissies
     ];
+
+    // Relatie: een game heeft meerdere scores
+    public function scores()
+    {
+        return $this->hasMany(Score::class);
+    }
 }

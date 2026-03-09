@@ -93,4 +93,34 @@ class GameAdminController extends Controller
         // Terug naar dezelfde pagina met bevestiging
         return back()->with('success', 'Score toegevoegd voor ' . $game->name);
     }
+
+    // Verwijder een game en alle bijbehorende scores
+    public function destroy(Game $game)
+    {
+        try {
+            // Tel het aantal scores dat wordt verwijderd voor feedback
+            $scoreCount = $game->scores()->count();
+
+            // Verwijder eerst alle scores die bij deze game horen
+            $game->scores()->delete();
+
+            // Verwijder de game zelf
+            $game->delete();
+
+            // Terug naar de games lijst met gedetailleerde succesmelding
+            $message = 'Game "' . $game->name . '" is succesvol verwijderd.';
+            if ($scoreCount > 0) {
+                $message .= ' Er zijn ' . $scoreCount . ' bijbehorende scores verwijderd.';
+            } else {
+                $message .= ' Er waren geen scores voor deze game.';
+            }
+
+            return redirect()->route('admin.games.index')
+                ->with('success', $message);
+        } catch (\Exception $e) {
+            // Foutafhandeling als er iets misgaat
+            return redirect()->route('admin.games.index')
+                ->with('error', 'Er is een fout opgetreden bij het verwijderen van de game: ' . $e->getMessage());
+        }
+    }
 }
