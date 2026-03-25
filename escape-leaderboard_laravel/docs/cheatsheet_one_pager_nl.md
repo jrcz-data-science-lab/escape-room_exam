@@ -1,33 +1,37 @@
 **1) Korte introductie (10–12s)**
-"Deze applicatie biedt een publieke leaderboard waar bezoekers scores kunnen indienen en een aparte admin-interface voor beheer. Scores worden toegevoegd via een veilige API en beheerd via een sessie-gevoede admin-login."
+"Deze applicatie biedt een publieke leaderboard waar bezoekers scores kunnen bekijken en een aparte admin-interface voor beheer. Games en scores worden beheerd via een beveiligd admin panel met per-game API tokens voor veilige score submissions."
 
 **2) Hoe voeg je een score toe? (15–20s)**
-"De client stuurt een POST naar `/api/scores` met JSON `{ "game_slug": "<slug>", "player_name": "<naam>", "score": <getal> }` en een API-token. De API verwacht een geldige `game_slug` en valideert `player_name` als string en `score` als integer >= 0. Het token kan meegegeven worden als header `X-API-TOKEN` of `X-Token`, of als query parameter `api_token`. Bij succes wordt het record opgeslagen met `Score::create()` en de API geeft een 201-response terug."
+"De admin kan via het admin panel scores toevoegen aan een game. Dit gebeurt via POST naar `admin.games.addScore` met `player_name`, `score` en `api_token`. De API valideert het token tegen de specifieke game en slaat de score op met `Score::create()`. Het IP-adres wordt gelogd voor security."
 
 Exact quote voor de examinator:
-"POST `/api/scores` met `game_slug`, `player_name` en `score`; token via `X-API-TOKEN`/`X-Token` of `api_token`; server valideert en slaat op; response 201."
+"POST naar `admin.games.addScore` met `player_name`, `score` en `api_token`; token validatie per game; response met success message."
 
 **3) Hoe wordt de API beveiligd? (10s)**
-"De API gebruikt de middleware alias `leaderboard.token` (`App\Http\Middleware\CheckLeaderboardApiToken`). Deze middleware leest het token uit `X-API-TOKEN` of `X-Token` header (of `api_token` query param) en zoekt de bijbehorende `Game` op via `game_slug`. Het controleert het aangeleverde token tegen het `api_token`-veld van die `Game`. Zonder geldig token of zonder `game_slug` krijgt de client een 401-response."
+"Elke game heeft een unieke API token in de database. De middleware `AdminAuth` beschermt admin routes. Token validatie gebeurt per-game via `GameAdminController@addScore` die het token vergelijkt met `game->api_token`."
 
 Exact quote:
-"Middleware `leaderboard.token` haalt token uit header/query, zoekt `Game` op `game_slug` en vergelijkt met `Game->api_token`; ongeldig = 401."
+"Per-game API tokens in database; AdminAuth middleware voor admin routes; token validatie per game; ongeldig = error message."
 
 **4) Hoe werkt de admin-authenticatie? (10s)**
-"Admin logt in via `/admin/login`. De controller vergelijkt het ingevoerde wachtwoord met `ADMIN_PASSWORD` uit de environment. Bij succes zet de server `session('is_admin') = true`. Admin-routes zijn beveiligd met `AdminAuth` middleware die deze sessie-flag controleert."
+"Admin logt in via `/admin/login`. De controller gebruikt Laravel's built-in auth. Admin-routes zijn beveiligd met `AdminAuth` middleware die `auth()->check()` en `auth()->user()->is_admin` controleert."
 
 Exact quote:
-"Admin login vergelijkt wachtwoord met `ADMIN_PASSWORD` in .env; op succes: `session('is_admin') = true`; middleware blokkeert anders."
+"Admin login via Laravel auth; middleware `AdminAuth` controleert `auth()->check()` en `is_admin`; unauthorized = redirect."
 
 **5) Waarom geen token in localStorage? (6–8s)**
-"Het token blijft alleen in het invoerveld zodat het niet persistent opgeslagen wordt; dit vermindert risico op diefstal via XSS."
+"API tokens worden alleen in het admin formulier gehouden met `type="password"` en `autocomplete="new-password"` om XSS-risico te minimaliseren en te voorkomen dat browsers tokens opslaan."
 
 Exact quote:
-"Token wordt alleen in het invoerveld gehouden (RAM), niet in localStorage/sessionStorage, om XSS-risico te verkleinen."
+"Tokens alleen in password field met autocomplete="new-password"; geen persistent storage om XSS risico te verkleinen."
 
 **6) Belangrijke security best practices (voor extra vraag) (10s)**
 
-- "Gebruik gehashte gebruikersaccounts voor admin in plaats van plain `ADMIN_PASSWORD`."
+- "Per-game API tokens voor isolatie"
+- "Input validation met Laravel rules"
+- "CSRF protection op alle formulieren"
+- "Cascade delete voor data integriteit"
+- "IP logging voor audit trails"
 - "Voeg rate-limiting toe op `/api/scores` om brute force en DoS te beperken."
 
 Exact quote:
