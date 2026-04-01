@@ -1,6 +1,6 @@
 # 🚀 Release Notes - Escape Room Leaderboard
 
-## Version 2.0.0 - "Production Release"
+## Version 1.0.0 - "Production Release"
 
 _Released: March 25, 2026_
 

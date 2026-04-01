@@ -519,7 +519,7 @@ Zie [LICENSE](LICENSE) file voor volledige tekst.
 
 ## Version History
 
-### Current Version: v2.0.0 (Production Release)
+### Current Version: v1.0.0 (Production Release)
 
 - **Release Date**: March 25, 2026
 - **Major Features**: Complete functionality, enhanced security, professional UI
@@ -529,9 +529,6 @@ Zie [LICENSE](LICENSE) file voor volledige tekst.
 
 ### Previous Versions
 
-- **v1.2.0** - Error handling improvements
-- **v1.1.0** - API token validation
-- **v1.0.0** - Initial release
-
+- **v0.x.x** - Development versions
 
 **🚀 Ready for production deployment and academic examination!**
