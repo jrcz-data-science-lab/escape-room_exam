@@ -1,32 +1,28 @@
 # 🚀 Release Notes - Escape Room Leaderboard
 
-## Version 2.0.0 - "Professional Portfolio Edition"
-*Released: March 25, 2026*
+## Version 2.0.0 - "Production Release"
+
+_Released: March 25, 2026_
 
 ---
 
 ## 🎯 **Release Overview**
 
-Deze release brengt de Escape Room Leaderboard naar een **professioneel niveau** met volledige documentatie, verbeterde security, en examen-ready features. Perfect voor afstudeerportfolio en productie gebruik.
+Deze release brengt de Escape Room Leaderboard naar een **productie-klaar niveau** met volledige functionaliteit, verbeterde security, en professionele features. Geschikt voor bedrijfsgebruik en productie deployment.
 
 ---
 
 ## ✨ **Nieuwe Features**
 
-### 📚 **Complete Documentatie Suite**
-- **Code Kaart** - Volledige code referentie met huidige implementatie
-- **Code Analyse** - Diepgaande security en performance analyse
-- **Database Uitleg** - Examen-ready database documentatie
-- **Bug Reports** - Professionele bug rapportage templates
-- **Portfolio Documentatie** - Compleet afstudeerportfolio
+### **Enhanced Security**
 
-### 🔐 **Enhanced Security**
 - **Per-Game API Tokens** - Unieke tokens per escape room
 - **IP Logging** - Audit trails voor alle score submissions
 - **Password Masking** - Protection tegen shoulder surfing
 - **Input Validation** - Comprehensive Laravel validation rules
 
 ### 🎨 **Professional UI/UX**
+
 - **Dark Theme** met glassmorphism effecten
 - **Responsive Design** voor alle apparaten
 - **Security-focused** password input velden
@@ -34,37 +30,24 @@ Deze release brengt de Escape Room Leaderboard naar een **professioneel niveau**
 
 ---
 
-## 🗂️ **Documentation Updates**
-
-### **Core Documentation**
-- ✅ **ERD** - Complete database schema met relaties
-- ✅ **Design Document** - Architectuur en security design
-- ✅ **Cheatsheet** - Snelle referentie voor examen
-- ✅ **Code Kaart** - Actuele code state documentatie
-
-### **Portfolio Documentation**
-- ✅ **Afstudeerportfolio** - Professioneel portfolio document
-- ✅ **Presentatie** - Examen presentatie slides
-- ✅ **Project Beschrijving** - Complete project overview
-- ✅ **20 Punten Checklist** - Examen requirements check
-
----
-
-## 🔧 **Technical Improvements**
+## **Technical Improvements**
 
 ### **Backend Enhancements**
+
 - **Laravel 12.x** compatibility
 - **Eloquent Relations** met proper cascade delete
 - **Middleware Security** met AdminAuth protection
 - **Error Handling** met user-friendly messages
 
 ### **Database Optimizations**
+
 - **Proper Indexes** voor performance
 - **Foreign Key Constraints** voor data integriteit
 - **Cascade Delete** voor efficiente data removal
 - **IP Address Logging** voor audit trails
 
 ### **Frontend Improvements**
+
 - **Vite Build System** voor asset optimization
 - **CSS Minification** voor snellere laadtijden
 - **Responsive Design** met mobile support
@@ -75,6 +58,7 @@ Deze release brengt de Escape Room Leaderboard naar een **professioneel niveau**
 ## 🛡️ **Security Features**
 
 ### **Multi-Layer Security**
+
 1. **Authentication** - Laravel Auth met is_admin check
 2. **Authorization** - AdminAuth middleware protection
 3. **API Security** - Per-game unique tokens
@@ -83,6 +67,7 @@ Deze release brengt de Escape Room Leaderboard naar een **professioneel niveau**
 6. **Password Masking** - Shoulder surfing protection
 
 ### **Data Protection**
+
 - **IP Logging** voor audit trails
 - **Cascade Delete** voor data integriteit
 - **Token Isolation** per-game beveiliging
@@ -93,12 +78,14 @@ Deze release brengt de Escape Room Leaderboard naar een **professioneel niveau**
 ## 📊 **Performance Metrics**
 
 ### **Current Performance**
+
 - **Page Load Time:** ~1-2 seconds
 - **Database Queries:** 2-5 per request
 - **Memory Usage:** ~50MB per request
 - **Response Time:** ~200ms for simple operations
 
 ### **Optimizations Applied**
+
 - **Database Indexes** voor snellere queries
 - **Asset Minification** via Vite
 - **Eager Loading** voor N+1 problem prevention
@@ -108,27 +95,31 @@ Deze release brengt de Escape Room Leaderboard naar een **professioneel niveau**
 
 ## 🔄 **Breaking Changes**
 
-### **Documentation Restructuring**
-- **Removed** 15+ verouderde documentatie bestanden
-- **Consolidated** documentatie in 3 core bestanden
-- **Updated** alle documenten naar huidige code state
-
 ### **API Changes**
+
 - **Per-game tokens** vervangen globale tokens
 - **IP logging** toegevoegd aan score submissions
 - **Enhanced validation** voor alle input velden
+
+### **Database Changes**
+
+- **Added** `submitted_from_ip` column aan scores table
+- **Enhanced** foreign key constraints
+- **Optimized** database indexes
 
 ---
 
 ## 🐛 **Bug Fixes**
 
 ### **Security Fixes**
+
 - ✅ Fixed token validation voor per-game security
 - ✅ Added IP logging voor audit trails
 - ✅ Enhanced password masking tegen shoulder surfing
 - ✅ Improved input validation voor alle endpoints
 
 ### **UI/UX Fixes**
+
 - ✅ Fixed responsive design issues
 - ✅ Improved dark theme consistency
 - ✅ Enhanced mobile navigation
@@ -139,15 +130,17 @@ Deze release brengt de Escape Room Leaderboard naar een **professioneel niveau**
 ## 📋 **Installation & Setup**
 
 ### **Requirements**
+
 - **PHP 8.2+**
 - **Laravel 12.x**
 - **MySQL 8.0+**
 - **Node.js 18+** (voor Vite build)
 
 ### **Installation Steps**
+
 ```bash
 # Clone repository
-git clone <repository-url>
+git clone https://github.com/jrcz-data-science-lab/escape-room_exam.git
 cd escape-leaderboard_laravel
 
 # Install dependencies
@@ -174,6 +167,7 @@ php artisan serve
 ## 🎯 **Production Deployment**
 
 ### **Environment Variables**
+
 ```env
 APP_ENV=production
 APP_DEBUG=false
@@ -187,6 +181,7 @@ DB_PASSWORD=your-password
 ```
 
 ### **Security Recommendations**
+
 - **HTTPS** enforcement
 - **Environment variables** secure storage
 - **Database backups** regular schedule
@@ -197,12 +192,14 @@ DB_PASSWORD=your-password
 ## 🔮 **Future Roadmap**
 
 ### **Version 2.1.0 (Q2 2026)**
+
 - **Real-time updates** via WebSockets
 - **Advanced analytics** dashboard
 - **Multi-tenant support**
 - **API rate limiting**
 
 ### **Version 2.2.0 (Q3 2026)**
+
 - **Mobile app** development
 - **Advanced search** functionality
 - **Export features** (PDF, Excel)
@@ -212,21 +209,11 @@ DB_PASSWORD=your-password
 
 ## 📞 **Support & Contact**
 
-### **Documentation**
-- **Complete portfolio** in `/portfolio` directory
-- **Technical documentation** in `/docs` directory
-- **Code examples** in `/code_kaart.md`
-
 ### **Issues & Support**
+
 - **Bug reports** via GitHub Issues
 - **Feature requests** via GitHub Discussions
 - **Security issues** via private contact
-
----
-
-## 🎉 **Acknowledgments**
-
-Deze release is het resultaat van **maanden van ontwikkeling** en **uitgebreide documentatie** voor afstudeerdoeleinden. Speciale dank aan alle bijdragers en testers die deze professionele release mogelijk hebben gemaakt.
 
 ---
 
@@ -236,6 +223,14 @@ Dit project valt onder de **MIT License**. Zie `LICENSE.md` voor volledige detai
 
 ---
 
-**🚀 Ready for production use and examination!**
+## 🎉 **Acknowledgments**
 
-*This release represents a fully documented, secure, and professional Escape Room Leaderboard system suitable for both production deployment and academic examination.*
+Deze release is het resultaat van **uitgebreide ontwikkeling** en **professionele documentatie** voor productie gebruik. Speciale dank aan alle bijdragers en testers die deze release mogelijk hebben gemaakt.
+
+---
+
+**🚀 Ready for production deployment and business use!**
+
+_This release represents a fully documented, secure, and professional
+Escape Room Leaderboard system suitable for production deployment
+and business applications._
