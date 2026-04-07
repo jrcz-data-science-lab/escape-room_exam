@@ -4,18 +4,24 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminAuth
 {
     public function handle(Request $request, Closure $next)
     {
-        // Controleer of de sessie aangeeft dat de gebruiker admin is
-        if (!$request->session()->get('is_admin')) {
-            // Als niet ingelogd als admin, stuur door naar de admin login pagina
+        // Check of user is ingelogd
+        if (!Auth::check()) {
             return redirect()->route('admin.login');
         }
 
-        // Als admin-flag aanwezig is, laat de request door
+        // Check of ingelogde user admin is
+        if (!Auth::user()->is_admin) {
+            Auth::logout();
+            return redirect()->route('admin.login')
+                ->withErrors(['email' => 'Geen admin rechten']);
+        }
+
         return $next($request);
     }
 }

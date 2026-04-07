@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,11 +16,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Maak admin user met gehasht wachtwoord
+        User::create([
+            'name' => 'Admin User',
+            'email' => 'admin@escape-room.com',
+            'password' => Hash::make('admin123'), // Gehasht met Bcrypt/Argon2
+            'is_admin' => true,
+        ]);
 
+        // Optionele test user (geen admin)
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'is_admin' => false,
         ]);
     }
 }

@@ -47,21 +47,20 @@
                 @foreach($games as $game)
                 <div class="game-card">
                     <h3 class="game-title">{{ $game->name }}</h3>
-                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">Slug: <strong>{{ $game->slug }}</strong></p>
-                    @if($game->description)
-                    <p class="game-description">{{ $game->description }}</p>
-                    @endif
                     <div style="margin-bottom: 20px;">
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">Slug: <strong>{{ $game->slug }}</strong></p>
+                        @if($game->description)
+                        <p class="game-description">{{ $game->description }}</p>
+                        @endif
                         <a href="{{ route('leaderboard.game', $game->slug) }}" class="game-link-button" style="margin-bottom: 15px;">Bekijk public</a>
                     </div>
                     <form method="POST" action="{{ route('admin.games.addScore', $game->id) }}" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;">
                         @csrf
                         <input name="player_name" placeholder="Speler naam" style="flex: 1; min-width: 150px;" required>
                         <input name="score" placeholder="Score" type="number" min="0" style="width: 100px;" required>
-                        <input name="api_token" type="password" style="flex: 1; min-width: 150px;" required autocomplete="new-password" placeholder="••••••••••" formnovalidate>
-                        @error('api_token') <p style="color: var(--danger-red); font-size: 14px; margin-top: 8px; flex-basis: 100%;">{{ $message }}</p> @enderror
                         <button type="submit" class="btn" style="flex: 1; min-width: 120px;">Snelle toevoeging</button>
                     </form>
+
                     <div style="margin-top: 15px; display: flex; gap: 10px;">
                         <form method="POST" action="{{ route('admin.games.destroy', $game->id) }}" style="display:inline;">
                             @csrf @method('DELETE')

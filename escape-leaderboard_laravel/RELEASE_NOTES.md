@@ -1,5 +1,41 @@
 # 🚀 Release Notes - Escape Room Leaderboard
 
+## Version 1.0.1 - "🔐 Beveiligings Release - Wachtwoord Hashing"
+
+_Released: April 7, 2026_
+
+---
+
+## 🎯 **Release Overview**
+
+Kritieke beveiligingsupdate met verbeterde wachtwoord hashing en database-gebaseerde authenticatie, ter vervanging van onveilige .env opslag.
+
+### ✨ **Wat is er veranderd?**
+
+#### ✨ **Toegevoegd**
+
+- Veilige wachtwoord hashing met bcrypt/Argon2
+- Database-gebaseerde authenticatie (vervangt .env wachtwoord)
+- Admin gebruiker met gehasht wachtwoord via seeder
+
+#### 🛡️ **Beveiligingsverbeteringen**
+
+- AdminAuth middleware controleert login en admin rechten
+- Automatische doorsturing als admin al ingelogd is
+- API token validatie met 4-staps controle
+- Rate limiting op API endpoints (30 req/min)
+
+#### 🗑️ **Verwijderd**
+
+- Onveilige .env wachtwoord opslag
+- Platte tekst wachtwoord vergelijking
+
+### ⚠️ **Belangrijk**
+
+Admin login werkt nu via database met gehashte wachtwoorden.
+
+---
+
 ## Version 1.0.0 - "Production Release"
 
 _Released: March 25, 2026_

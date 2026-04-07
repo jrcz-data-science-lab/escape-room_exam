@@ -1,51 +1,65 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-// Namespace voor administratie controllers
 
 use App\Http\Controllers\Controller;
-// Basis controller import
-
 use Illuminate\Http\Request;
-// Request import voor toegang tot form input en sessie
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class AuthController extends Controller
 {
-    // Toon het login-formulier voor admins
+    // Toon het login-formulier voor admins (redirect als al ingelogd)
     public function showLogin()
     {
-        return view('admin.login'); // render de Blade view resources/views/admin/login.blade.php
-    }
-
-    // Verwerk het login-formulier
-    public function login(Request $request)
-    {
-        // Valideer dat een wachtwoord is opgegeven
-        $request->validate([
-            'password' => 'required|string'
-        ]);
-
-        // Haal het opgegeven wachtwoord uit de request
-        $password = $request->input('password');
-
-        // Vergelijk met de ADMIN_PASSWORD uit de environment
-        // LET OP: in productie wil je gehashte wachtwoorden en een gebruikersmodel
-        if ($password === env('ADMIN_PASSWORD')) {
-            // Sla in de sessie op dat de gebruiker admin is
-            $request->session()->put('is_admin', true);
-            // Redirect naar admin dashboard
+        // Als user al ingelogd is, redirect naar admin dashboard
+        if (Auth::check() && Auth::user()->is_admin) {
             return redirect()->route('admin.index');
         }
 
-        // Bij foutieve inlog: terug naar formulier met foutmelding
-        return back()->withErrors(['password' => 'Onjuiste beheerderswachtwoord']);
+        return view('admin.login');
+    }
+
+    // Verwerk het login-formulier - DATABASE AUTHENTICATIE
+    public function login(Request $request)
+    {
+        // Valideer email en wachtwoord
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ], [
+            'email.required' => 'Email is verplicht',
+            'email.email' => 'Voer een geldig emailadres in',
+            'password.required' => 'Wachtwoord is verplicht',
+        ]);
+
+        // Zoek user in database
+        $user = User::where('email', $credentials['email'])->first();
+
+        // Check of user bestaat en wachtwoord klopt
+        if ($user && Hash::check($credentials['password'], $user->password)) {
+            // Check of user admin is
+            if ($user->is_admin) {
+                // Login de user
+                Auth::login($user);
+                $request->session()->regenerate();
+
+                return redirect()->route('admin.index');
+            } else {
+                return back()->withErrors(['email' => 'Geen admin rechten']);
+            }
+        }
+
+        // Login failed
+        return back()->withErrors(['email' => 'Ongeldige inloggegevens'])
+            ->withInput($request->except('password'));
     }
 
     // Logout action voor admin
     public function logout(Request $request)
     {
-        // Invalideer de volledige sessie en genereer een nieuw CSRF-token
-        // Dit voorkomt session-fixation en zorgt dat oude sessie-cookies ongeldig worden
+        Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

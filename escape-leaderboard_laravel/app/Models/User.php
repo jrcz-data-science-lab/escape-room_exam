@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',     // Gebruikersnaam
         'email',    // Emailadres van de gebruiker
         'password', // Gehashed wachtwoord
+        'is_admin', // Admin vlag
     ];
 
     /**
@@ -33,11 +34,11 @@ class User extends Authenticatable
     ];
 
     /**
-     * Type-casts voor velden; password wordt automatisch gehashed,
-     * email_verified_at wordt naar datetime gecast.
+     * Type-casts voor velden
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_admin' => 'boolean', // Cast naar boolean
     ];
 }

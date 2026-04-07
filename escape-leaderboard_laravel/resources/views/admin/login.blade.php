@@ -16,14 +16,14 @@
                 <span class="navbar-title-text">Leaderboard</span>
             </a>
             <div class="navbar-links">
-                @if(session('is_admin'))
+                @auth
                 <a href="{{ route('admin.index') }}">Admin</a>
                 <form method="POST" action="{{ route('admin.logout') }}" style="display:inline">@csrf
                     <button type="submit">Logout</button>
                 </form>
                 @else
                 <a href="{{ route('admin.login') }}">Admin login</a>
-                @endif
+                @endauth
             </div>
         </div>
     </nav>
@@ -40,9 +40,13 @@
 
             <form method="POST" action="{{ route('admin.login.post') }}" class="login-section">
                 @csrf
-                <label style="width: 100%; text-align: left; color: var(--text-light); font-weight: 600; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; font-size: 14px;">Wachtwoord</label>
-                <input name="password" type="password" class="login-input" required autofocus />
-                <button type="submit" class="login-btn">Login</button>
+                <label style="width: 100%; text-align: left; color: var(--text-light); font-weight: 600; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; font-size: 14px;">Emailadres</label>
+                <input name="email" type="email" class="login-input" value="{{ old('email') }}" required placeholder="admin@example.com" />
+
+                <label style="width: 100%; text-align: left; color: var(--text-light); font-weight: 600; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; font-size: 14px; margin-top: 20px;">Wachtwoord</label>
+                <input name="password" type="password" class="login-input" required placeholder="••••••••" />
+
+                <button type="submit" class="login-btn">Inloggen</button>
             </form>
         </div>
     </div>
