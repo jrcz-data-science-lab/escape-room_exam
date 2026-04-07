@@ -7,6 +7,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.1] - 2026-04-02
+
+### 🔐 **Beveiligings Release - Wachtwoord Hashing**
+
+#### ✨ **Toegevoegd**
+
+- **Veilige Wachtwoord Hashing**
+    - Admin wachtwoorden gebruiken nu bcrypt/Argon2 hashing
+    - Wachtwoorden worden niet meer als platte tekst opgeslagen
+    - Laravel Hash facade geïmplementeerd voor veilige authenticatie
+    - Database-gebaseerde authenticatie (voorheen .env gebaseerd)
+
+#### 🛡️ **Beveiligingsverbeteringen**
+
+- **Authenticatie Verbetering**
+    - Vervangen van .env wachtwoord opslag naar database authenticatie
+    - Gebruikt Laravel's ingebouwde `Hash::make()` en `Hash::check()`
+    - Admin gebruiker wordt aangemaakt met gehasht wachtwoord via DatabaseSeeder
+    - `is_admin` boolean vlag toegevoegd aan users tabel
+
+- **Admin Login Beveiliging**
+    - AdminAuth middleware controleert nu op `Auth::check()` en `is_admin`
+    - Automatische doorsturing naar dashboard als admin al ingelogd is
+    - Uitloggen en foutmelding bij niet-admin gebruikers
+
+- **API Token Beveiliging**
+    - CheckLeaderboardApiToken middleware controleert game tokens
+    - 4-staps validatie: token aanwezig, game slug, game bestaat, token klopt
+    - Rate limiting op API endpoints (30 requests per minuut)
+
+#### 🗑️ **Verwijderd**
+
+- **Onveilige Authenticatie Methoden**
+    - Verwijderd platte tekst wachtwoord vergelijking uit .env bestand
+    - Verwijderd sessie-gebaseerde `is_admin` vlag
+    - Verouderde onveilige login flow verwijderd
+
+---
+
 ## [1.0.0] - 2026-03-25
 
 ### 🎉 **Initial Release - Production Release**
