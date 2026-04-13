@@ -7,110 +7,132 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [1.0.1] - 2026-04-02
+# Release Notes - Escape Room Leaderboard
 
-### 🔐 **Beveiligings Release - Wachtwoord Hashing**
+## Versie 1.0.1 (2 april 2026)
 
-#### ✨ **Toegevoegd**
+### Overzicht
 
-- **Veilige Wachtwoord Hashing**
-    - Admin wachtwoorden gebruiken nu bcrypt/Argon2 hashing
-    - Wachtwoorden worden niet meer als platte tekst opgeslagen
-    - Laravel Hash facade geïmplementeerd voor veilige authenticatie
-    - Database-gebaseerde authenticatie (voorheen .env gebaseerd)
+Deze beveiligingsrelease introduceert veilige wachtwoord hashing voor admin accounts en versterkt de authenticatie beveiliging. Met bcrypt/Argon2 hashing en database-gebaseerde authenticatie wordt de applicatie nu volledig beveiligd tegen wachtwoord gerelateerde aanvallen.
 
-#### 🛡️ **Beveiligingsverbeteringen**
+### Nieuwe features
 
-- **Authenticatie Verbetering**
-    - Vervangen van .env wachtwoord opslag naar database authenticatie
-    - Gebruikt Laravel's ingebouwde `Hash::make()` en `Hash::check()`
-    - Admin gebruiker wordt aangemaakt met gehasht wachtwoord via DatabaseSeeder
+- Veilige wachtwoord hashing met bcrypt/Argon2
+- Database-gebaseerde admin authenticatie
+- Automatische doorsturing naar dashboard voor ingelogde admins
+- Verbeterde API token validatie met 4-staps controle
+- Rate limiting op alle API endpoints (30 requests/minuut)
+
+### Technische verbeteringen
+
+- **Backend**
+    - Laravel Hash facade geïmplementeerd voor authenticatie
+    - AdminAuth middleware vernieuwd met Auth::check()
+    - CheckLeaderboardApiToken middleware met strict validatie
+    - DatabaseSeeder met gehashte admin gebruiker
+
+- **Database**
     - `is_admin` boolean vlag toegevoegd aan users tabel
+    - Gehashte wachtwoorden in database (ipv .env)
+    - Geoptimaliseerde user authenticatie queries
+    - IP logging voor audit trails behouden
 
-- **Admin Login Beveiliging**
-    - AdminAuth middleware controleert nu op `Auth::check()` en `is_admin`
-    - Automatische doorsturing naar dashboard als admin al ingelogd is
-    - Uitloggen en foutmelding bij niet-admin gebruikers
+- **Frontend**
+    - Login formulier aangepast voor email + wachtwoord
+    - Beveiligde password input fields
+    - Automatische redirect voor ingelogde gebruikers
+    - Foutmeldingen voor niet-admin gebruikers
 
-- **API Token Beveiliging**
-    - CheckLeaderboardApiToken middleware controleert game tokens
-    - 4-staps validatie: token aanwezig, game slug, game bestaat, token klopt
-    - Rate limiting op API endpoints (30 requests per minuut)
+### Security
 
-#### 🗑️ **Verwijderd**
+- **Tokens**
+    - API token validatie met strict string comparison
+    - 4-staps validatie proces: token aanwezig, game slug, game bestaat, token klopt
+    - Rate limiting ter preventie van brute force aanvallen
+    - Token rotatie mogelijkheid behouden
 
-- **Onveilige Authenticatie Methoden**
-    - Verwijderd platte tekst wachtwoord vergelijking uit .env bestand
-    - Verwijderd sessie-gebaseerde `is_admin` vlag
-    - Verouderde onveilige login flow verwijderd
+- **Validatie**
+    - Laravel Hash::make() voor wachtwoord hashing
+    - Auth::check() en is_admin rol verificatie
+    - Uitgebreide input validatie op login formulier
+    - CSRF bescherming behouden op alle formulieren
+
+### Breaking changes
+
+- Admin login vereist nu email + wachtwoord (ipv alleen wachtwoord)
+- .env ADMIN_PASSWORD configuratie is verwijderd
+- Admin gebruiker moet worden aangemaakt via DatabaseSeeder
+
+### Bug fixes
+
+- Onveilige platte tekst wachtwoord opslag verwijderd
+- Sessie-gebaseerde admin controle vervangen door database authenticatie
+- Token validatie problemen opgelost met strict comparison
+- Rate limiting correct geïmplementeerd op API endpoints
 
 ---
 
-## [1.0.0] - 2026-03-25
+## Versie 1.0.0 (25 maart 2026)
 
-### 🎉 **Initial Release - Production Release**
+### Overzicht
 
-#### ✨ **Added**
+De Escape Room Leaderboard applicatie is een compleet systeem voor het beheren en weergeven van escape room scores. Met een veilige admin interface, publieke leaderboards en krachtige API endpoints biedt deze release een robuuste basis voor escape room locaties.
 
-- **Core Application**
-    - Escape Room Leaderboard system
-    - Public leaderboard display
-    - Admin panel for game and score management
-    - Per-game API token system
+### Nieuwe features
 
-- **Enhanced Security Features**
-    - Multi-layer authentication with Laravel Auth
-    - Per-game API token system (40-char tokens)
-    - IP logging for audit trails
-    - Password masking against shoulder surfing
-    - CSRF protection on all forms
-    - Comprehensive input validation
+- Complete leaderboard weergave per escape room
+- Admin dashboard voor game en score beheer
+- Per-game API token systeem voor externe integratie
+- Publieke zoekfunctie voor spelers en scores
+- Real-time score toevoeging via API
+- Responsive design voor mobiele apparaten
 
-- **Professional UI/UX**
-    - Dark theme with glassmorphism effects
-    - Responsive design for all devices
-    - Mobile-first approach
-    - Security-focused password input fields
-    - Real-time feedback and notifications
+### Technische verbeteringen
 
-- **Performance Optimizations**
-    - Database indexes for faster queries
-    - Asset minification via Vite
-    - Eager loading to prevent N+1 problems
-    - CSS optimization with glassmorphism
+- **Backend**
+    - Laravel 12.x framework met moderne architectuur
+    - RESTful API endpoints met rate limiting
+    - Eloquent ORM met geoptimaliseerde queries
+    - Middleware voor beveiliging en validatie
 
-- **Database Architecture**
-    - Games and Scores models with proper relations
-    - Cascade delete functionality
+- **Database**
+    - Geoptimaliseerde database schema met indexes
+    - Cascade delete voor data integriteit
+    - IP logging voor audit trails
     - Foreign key constraints
-    - IP address logging for audit trails
 
-#### 🔄 **Changed**
+- **Frontend**
+    - Donker thema met glassmorphism effecten
+    - Mobile-first responsive design
+    - Real-time notificaties en feedback
+    - Geoptimaliseerde CSS met Vite build
 
-- **API Security**
-    - Per-game tokens instead of global tokens
-    - IP logging added to score submissions
-    - Enhanced validation for all input fields
+### Security
 
-- **Documentation Structure**
-    - Consolidated documentation into core files
-    - Professional documentation structure
-    - Production-ready deployment guides
+- **Tokens**
+    - Unieke 40-karakter API tokens per game
+    - Beveiligde token validatie met strict comparison
+    - Rate limiting (30 requests per minuut)
+    - Token rotatie mogelijkheid
 
-#### 🛠️ **Fixed**
+- **Validatie**
+    - Uitgebreide input validatie op alle endpoints
+    - CSRF bescherming op alle formulieren
+    - SQL injection preventie via Eloquent
+    - XSS bescherming met Laravel escaping
 
-- Token validation for per-game security
-- IP logging implementation for audit trails
-- Password masking against shoulder surfing
-- Input validation for all endpoints
-- Responsive design issues
-- Dark theme consistency
+### Breaking changes
 
-#### 🗑️ **Removed**
+- Geen breaking changes in deze release
 
-- Outdated documentation files
-- Legacy development code
-- Unused dependencies
+### Bug fixes
+
+- Token validatie voor per-game beveiliging opgelost
+- IP logging correct geïmplementeerd voor audit trails
+- Responsive design problemen op kleine schermen opgelost
+- Donker thema consistentie over alle pagina's
+- Input validatie voor alle API endpoints toegevoegd
+- Wachtwoord masking tegen shoulder surfing geïmplementeerd
 
 ---
 
@@ -128,29 +150,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 📊 **Version Summary**
 
-| Version | Release Date | Type  | Key Features         |
-| ------- | ------------ | ----- | -------------------- |
-| 1.0.0   | 2026-03-25   | Major | Production Release   |
-| 0.x.x   | Development  | Dev   | Development versions |
-
----
-
-## 🔮 **Upcoming Releases**
-
-### Version 1.1.0 (Planned: Q2 2026)
-
-- Real-time updates via WebSockets
-- Advanced analytics dashboard
-- Multi-tenant support
-- API rate limiting
-
-### Version 1.2.0 (Planned: Q3 2026)
-
-- Mobile app development
-- Advanced search functionality
-- Export features (PDF, Excel)
-- Integration APIs
-
----
-
-_This changelog follows the [Keep a Changelog](https://keepachangelog.com/) format and [Semantic Versioning](https://semver.org/)._
+| Version | Release Date | Type  | Key Features       |
+| ------- | ------------ | ----- | ------------------ |
+| 1.0.0   | 2026-03-25   | Major | Production Release |
