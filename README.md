@@ -27,7 +27,7 @@ Volg de onderstaande stappen om de applicatie in een lokale ontwikkelomgeving te
 
 1. **Clone de repository:**
    ```bash
-   git clone [https://github.com/jouw-username/escape-leaderboard.git](https://github.com/jouw-username/escape-leaderboard.git)
+   git clone (https://github.com/Ahmadalaina7/escape-room_exam)
    cd escape-leaderboard
 Dependencies installeren:
 
