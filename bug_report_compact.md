@@ -194,5 +194,3 @@ Deze bugoplossingen tonen aan dat ik in staat ben om:
 Elke fix is niet alleen een technische oplossing, maar ook een **leermoment** die mijn vaardigheden als ontwikkelaar heeft versterkt.
 
 ---
-
-*Professionele bug tracking en probleemoplossing - Kern van kwaliteitsontwikkeling*
