@@ -1,5 +1,5 @@
 
-## 🐞 **Bug #1: Zoekbalk Exact Match**
+## **Bug #1: Zoekbalk Exact Match**
 
 ### **Probleem**
 Zoekbalk vond alleen exacte matches, spelers met lange namen werden niet gevonden.
@@ -27,13 +27,13 @@ function searchScores() {
 ```
 
 ### **Resultaat**
-- ✅ **Partial matching** geïmplementeerd
-- ✅ **Real-time filtering** zonder server calls
-- ✅ **Gebruiksvriendelijker** zoekervaring
+-  **Partial matching** geïmplementeerd
+-  **Real-time filtering** zonder server calls
+-  **Gebruiksvriendelijker** zoekervaring
 
 ---
 
-## 🔐 **Bug #2: Per-Game API Tokens**
+##  **Bug #2: Per-Game API Tokens**
 
 ### **Probleem**
 Systeem gebruikte één globale API token voor alle escape rooms.
@@ -69,14 +69,14 @@ public function addScore(Request $request, Game $game)
 ```
 
 ### **Resultaat**
-- ✅ **Unieke tokens** per game
-- ✅ **Automatische generatie** bij nieuwe games
-- ✅ **Database storage** voor tokens
-- ✅ **Schaalbare architectuur**
+-  **Unieke tokens** per game
+-  **Automatische generatie** bij nieuwe games
+-  **Database storage** voor tokens
+-  **Schaalbare architectuur**
 
 ---
 
-## 🧹 **Bug #3: Dubbele Middleware**
+##  **Bug #3: Dubbele Middleware**
 
 ### **Probleem**
 Twee verschillende middlewares voor zelfde functionaliteit - onduidelijkheid.
@@ -104,14 +104,14 @@ public function handle($request, Closure $next)
 ```
 
 ### **Resultaat**
-- ✅ **Duidelijke middleware** structuur
-- ✅ **Verwijderde overbodige code**
-- ✅ **Betere onderhoudbaarheid**
-- ✅ **Documentatie** van keuzes
+-  **Duidelijke middleware** structuur
+-  **Verwijderde overbodige code**
+-  **Betere onderhoudbaarheid**
+-  **Documentatie** van keuzes
 
 ---
 
-## 🛡️ **Bug #4: Token Validatie**
+##  **Bug #4: Token Validatie**
 
 ### **Probleem**
 Token validatie accepteerde elk willekeurig token.
@@ -145,52 +145,11 @@ public function handle($request, Closure $next)
 ```
 
 ### **Resultaat**
-- ✅ **Echte token validatie** met database lookup
-- ✅ **401 responses** voor ongeldige tokens
-- ✅ **Proper error handling** met duidelijke messages
-- ✅ **Security audit trail** via logging
+- **Echte token validatie** met database lookup
+- **401 responses** voor ongeldige tokens
+- **Proper error handling** met duidelijke messages
+- **Security audit trail** via logging
 
 ---
-
-## 🎓 **Examen Presentatie**
-
-### **Opening Statement**
-"Tijdens de ontwikkeling van mijn Escape Room Leaderboard heb ik 4 kritieke bugs geïdentificeerd en systematisch opgelost. Elk probleem heb ik geanalyseerd, professioneel aangepakt, en gedocumenteerd."
-
-### **Kernpunten**
-1. **Security First** - 3 kritieke security fixes geïmplementeerd
-2. **User Experience** - Directe impact op eindgebruikers verbeterd
-3. **Code Quality** - Refactoring en opruimen voor betere onderhoudbaarheid
-4. **Systematische Aanpak** - Gestructureerde probleemanalyse
-
-### **Examen Voorbeeld**
-"Wanneer ik een security issue identificeer, begin ik met een risicoanalyse. Bij bug #4 was de impact kritiek - de API was volledig onbeveiligd. Mijn oplossing bestond uit drie lagen: database-driven validatie, proper error handling, en audit logging."
-
----
-
-## 📊 **Lessons Learned**
-
-### **Technisch**
-- **Security is geen afterthought** - Vanaf begin meenemen
-- **Code quality betaalt onderhoudbaarheid** - Regelmatig refactoring nodig
-- **Testing is cruciaal** - Grondige validatie van fixes
-- **Documentatie versnelt communicatie** - Duidelijke changelogs en procedures
-
-### **Professioneel**
-- **Systematisch werken** - Structuurde aanpak voorkomt chaos
-- **Proactief communicatie** - Vroegtijdig issues signaleren en aankaarten
-- **Continue learning** - Elke bug als leermoment beschouwen
-
----
-
-## 🏆 **Conclusie**
-
-Deze bugoplossingen tonen aan dat ik in staat ben om:
-- **Kritieke security issues** te identificeren en oplossen
-- **User experience problemen** systematisch aan te pakken
-- **Code kwaliteit** te waarborgen door refactoring
-- **Professioneel te communiceren** over technische keuzes
-
-Elke fix is niet alleen een technische oplossing, maar ook een **leermoment** die mijn vaardigheden als ontwikkelaar heeft versterkt.
 
 ---
